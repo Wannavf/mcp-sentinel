@@ -30,7 +30,7 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npx mcp-sentinel check --config ${{ inputs.config }} --lockfile ${{ inputs.lockfile }} --fail-on ${{ inputs.fail-on }}
+    - run: npx @wannavf/mcp-sentinel check --config ${{ inputs.config }} --lockfile ${{ inputs.lockfile }} --fail-on ${{ inputs.fail-on }}
       shell: bash
       env:
         FORCE_COLOR: '1'
