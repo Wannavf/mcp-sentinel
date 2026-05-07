@@ -311,7 +311,7 @@ Z3 formal compatibility proofs are a **separate paid feature**.
 - `sentinel prove` — mathematically proves backward/forward compatibility with exact counterexamples
 - `sentinel pro status` / `sentinel pro set-key <key>` — license management
 
-Get a license at **[sentinel.dev/pro](https://sentinel.dev/pro)**.
+Get a license at **COMING SOON**.
 
 | Plan | Price | Includes |
 |------|-------|----------|
