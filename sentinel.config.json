@@ -1,0 +1,17 @@
+{
+  "compatibility": "BACKWARD",
+  "failOn": "MAJOR",
+  "servers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/projects"
+      ]
+    }
+  },
+  "rules": {
+    "DESCRIPTION_SEMANTICS_CHANGED": "PATCH"
+  }
+}

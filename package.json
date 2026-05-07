@@ -1,0 +1,48 @@
+{
+  "name": "mcp-sentinel",
+  "version": "0.2.0",
+  "description": "Schema drift detection for MCP servers — the lockfile MCP should have shipped with.",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "schema",
+    "drift",
+    "lockfile",
+    "compatibility",
+    "ai-agent"
+  ],
+  "license": "MIT",
+  "repository": "github:mcp-sentinel/sentinel",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "sentinel": "./dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "action.yml"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.11.0",
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "fast-json-stable-stringify": "^2.1.0",
+    "ora": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/blessed": "^0.1.27",
+    "@types/node": "^22.13.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

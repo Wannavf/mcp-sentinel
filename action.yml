@@ -1,0 +1,40 @@
+﻿name: MCP Schema Drift Check
+description: Detect breaking changes in MCP server tool schemas
+author: mcp-sentinel
+
+inputs:
+  config:
+    description: Path to sentinel.config.json
+    required: false
+    default: sentinel.config.json
+  lockfile:
+    description: Path to sentinel-lock.json
+    required: false
+    default: sentinel-lock.json
+  fail-on:
+    description: Minimum severity to fail on (MAJOR, MINOR, PATCH)
+    required: false
+    default: MAJOR
+  compatibility:
+    description: Compatibility mode (STRICT, BACKWARD, FORWARD, FULL, NONE)
+    required: false
+    default: BACKWARD
+  comment:
+    description: Post a PR comment with the diff
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npx mcp-sentinel check --config ${{ inputs.config }} --lockfile ${{ inputs.lockfile }} --fail-on ${{ inputs.fail-on }}
+      shell: bash
+      env:
+        FORCE_COLOR: '1'
+
+branding:
+  icon: shield
+  color: blue
