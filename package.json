@@ -1,5 +1,5 @@
 {
-  "name": "mcp-sentinel",
+  "name": "@wannavf/mcp-sentinel",
   "version": "0.2.0",
   "description": "Schema drift detection for MCP servers — the lockfile MCP should have shipped with.",
   "keywords": [
