@@ -4,7 +4,7 @@
 
 MCP Sentinel snapshots your MCP server tool schemas, detects breaking changes, and classifies them as MAJOR, MINOR, or PATCH — so your agents never break on silent schema drift.
 
-[![npm version](https://img.shields.io/npm/v/mcp-sentinel)](https://www.npmjs.com/package/mcp-sentinel)
+[![npm version](https://img.shields.io/npm/v/@wannavf/mcp-sentinel)](https://www.npmjs.com/package/@wannavf/mcp-sentinel)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
@@ -44,12 +44,12 @@ When a server changes `amount: { minimum: 0 }` to `amount: { minimum: 1 }`, your
 ## Install
 
 ```bash
-npm install -g mcp-sentinel
+npm install -g @wannavf/mcp-sentinel
 ```
 
 Or zero-install:
 ```bash
-npx mcp-sentinel init
+npx @wannavf/mcp-sentinel init
 ```
 
 ---
@@ -245,7 +245,7 @@ jobs:
 ### GitHub Code Scanning (SARIF)
 
 ```yaml
-- run: npx mcp-sentinel diff --format sarif > sentinel.sarif
+- run: npx @wannavf/mcp-sentinel diff --format sarif > sentinel.sarif
 - uses: github/codeql-action/upload-sarif@v3
   with:
     sarif_file: sentinel.sarif
@@ -311,7 +311,7 @@ Z3 formal compatibility proofs are a **separate paid feature**.
 - `sentinel prove` — mathematically proves backward/forward compatibility with exact counterexamples
 - `sentinel pro status` / `sentinel pro set-key <key>` — license management
 
-Get a license at **COMING SOON**.
+Get a license at **coming soon**.
 
 | Plan | Price | Includes |
 |------|-------|----------|
