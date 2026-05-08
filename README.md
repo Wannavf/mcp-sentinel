@@ -25,21 +25,10 @@ When a server changes `amount: { minimum: 0 }` to `amount: { minimum: 1 }`, your
 |---|---|---|
 | Detect schema changes | Maybe | 20 classification rules |
 | Classify MAJOR/MINOR/PATCH | No | Semantic JSON Schema diff |
-| CI integration | Some | GitHub Action + PR comments |
+| CI integration | Some | GitHub Action + SARIF output |
 | Schema quality audit | No | Completeness + type coverage |
 | Lockfile with hashes | No | SHA-256 per-tool, merge-friendly |
 | Multiple output formats | Rare | Console, JSON, Markdown, SARIF |
-
-### Sentinel Pro (separate license)
-
-| | Free | Pro |
-|---|---|---|
-| Schema drift detection | All commands | All commands |
-| **Z3 formal compatibility proof** | — | Prove backward/forward compatibility |
-| **Exact counterexamples** | — | "amount:0 was valid, now rejected" |
-| License management | — | `sentinel pro set-key` / `sentinel pro status` |
-
----
 
 ## Install
 
@@ -102,7 +91,7 @@ Detailed change report. 4 output formats.
 ```bash
 sentinel diff                            # Console (color)
 sentinel diff --format json              # Machine-readable
-sentinel diff --format markdown          # For PR comments
+sentinel diff --format markdown          # Markdown report for issues/PRs
 sentinel diff --format sarif             # GitHub Code Scanning
 ```
 
@@ -237,7 +226,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: mcp-sentinel/action@v1
+      - uses: Wannavf/mcp-sentinel@main
         with:
           fail-on: MAJOR
 ```
@@ -291,8 +280,8 @@ jobs:
 ```
 sentinel/
 ├── src/
-│   ├── cli/             8 commands (init, snapshot, check, diff, update, watch, audit, lockfile-diff, tui)
-│   ├── core/             3 modules (types, lockfile, transport, hasher)
+│   ├── cli/             9 commands (init, snapshot, check, diff, update, watch, audit, lockfile-diff, tui)
+│   ├── core/             4 modules (types, lockfile, transport, hasher)
 │   ├── diff/             3 modules (engine, rules, compatibility)
 │   └── reporters/        4 modules (console, markdown, json, sarif)
 ├── action.yml            GitHub Action
@@ -304,20 +293,11 @@ sentinel/
 
 ---
 
-## Sentinel Pro
+## Roadmap
 
-Z3 formal compatibility proofs are a **separate paid feature**.
-
-- `sentinel prove` — mathematically proves backward/forward compatibility with exact counterexamples
-- `sentinel pro status` / `sentinel pro set-key <key>` — license management
-
-Get a license at **coming soon**.
-
-| Plan | Price | Includes |
-|------|-------|----------|
-| Pro | $29/mo | Z3 proofs, CI integration, priority support |
-| Team | $99/mo | Up to 10 servers, team dashboard |
-| Enterprise | $499/mo | Unlimited, SSO, on-prem proxy |
+- Formal compatibility proofs with counterexamples
+- PR comment helper for GitHub Actions
+- HTTP and SSE transports
 
 ---
 

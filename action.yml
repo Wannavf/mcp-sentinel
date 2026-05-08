@@ -1,6 +1,6 @@
-﻿name: MCP Schema Drift Check
+name: MCP Schema Drift Check
 description: Detect breaking changes in MCP server tool schemas
-author: mcp-sentinel
+author: Wannavf
 
 inputs:
   config:
@@ -15,14 +15,6 @@ inputs:
     description: Minimum severity to fail on (MAJOR, MINOR, PATCH)
     required: false
     default: MAJOR
-  compatibility:
-    description: Compatibility mode (STRICT, BACKWARD, FORWARD, FULL, NONE)
-    required: false
-    default: BACKWARD
-  comment:
-    description: Post a PR comment with the diff
-    required: false
-    default: 'true'
 
 runs:
   using: composite
@@ -30,7 +22,7 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    - run: npx @wannavf/mcp-sentinel check --config ${{ inputs.config }} --lockfile ${{ inputs.lockfile }} --fail-on ${{ inputs.fail-on }}
+    - run: npx -y @wannavf/mcp-sentinel check --config ${{ inputs.config }} --lockfile ${{ inputs.lockfile }} --fail-on ${{ inputs.fail-on }}
       shell: bash
       env:
         FORCE_COLOR: '1'
