@@ -17,22 +17,35 @@ export async function init(dir: string): Promise<void> {
   console.log("");
   console.log("MCP Sentinel — interactive setup");
   console.log("Press Enter to accept defaults.\n");
+  console.log("Default server: filesystem over the current directory (.)");
+  console.log("");
 
   const servers: Record<string, { command: string; args: string[] }> = {};
 
   let add = true;
   while (add) {
-    const name = await ask("Server name (or blank to finish): ");
-    if (!name.trim()) { add = false; break; }
+    const name = await ask("Server name (default: filesystem, blank to finish after first server): ");
+    if (!name.trim() && Object.keys(servers).length === 0) {
+      servers.filesystem = {
+        command: "npx",
+        args: ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      };
+      console.log("  Added filesystem\n");
+      break;
+    }
+    if (!name.trim() && Object.keys(servers).length > 0) { add = false; break; }
 
-    const command = await ask("  Command (e.g., npx): ");
-    const args = await ask("  Args, space-separated (e.g., -y @modelcontextprotocol/server-filesystem /data): ");
+    const serverName = name.trim() || "filesystem";
+    const command = await ask("  Command (default: npx): ");
+    const args = await ask("  Args (default: -y @modelcontextprotocol/server-filesystem .): ");
 
-    servers[name.trim()] = {
+    servers[serverName] = {
       command: command.trim() || "npx",
-      args: args.trim() ? args.trim().split(/\s+/) : [],
+      args: args.trim()
+        ? args.trim().split(/\s+/)
+        : ["-y", "@modelcontextprotocol/server-filesystem", "."],
     };
-    console.log("  Added " + name + "\n");
+    console.log("  Added " + serverName + "\n");
   }
 
   rl.close();
