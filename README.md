@@ -5,7 +5,42 @@
 MCP Sentinel snapshots your MCP server tool schemas, detects breaking changes, and classifies them as MAJOR, MINOR, or PATCH — so your agents never break on silent schema drift.
 
 [![npm version](https://img.shields.io/npm/v/@wannavf/mcp-sentinel)](https://www.npmjs.com/package/@wannavf/mcp-sentinel)
+[![npm downloads](https://img.shields.io/npm/dm/@wannavf/mcp-sentinel)](https://www.npmjs.com/package/@wannavf/mcp-sentinel)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+---
+
+## Quick Start
+
+```bash
+npx @wannavf/mcp-sentinel init
+sentinel snapshot
+sentinel check
+sentinel diff
+```
+
+Sentinel creates a `sentinel-lock.json` for your MCP server tool schemas. When a tool changes later, `sentinel check` fails CI and `sentinel diff` shows exactly what changed.
+
+```text
+filesystem: DRIFT detected
+
+MAJOR  read_file.path
+       PARAM_CONSTRAINT_TIGHTENED
+       minimum changed from 0 to 1
+
+PATCH  search_files
+       TOOL_ADDED
+       New tool is available on the server
+```
+
+## What It Catches
+
+- Removed tools and parameters
+- Required fields added to tool inputs
+- Type changes like `string` to `number`
+- Tightened constraints like `minimum`, `maximum`, `minLength`, and enums
+- Output schema changes that can break downstream agents
+- Missing descriptions and weak schema coverage
 
 ---
 
@@ -36,21 +71,9 @@ When a server changes `amount: { minimum: 0 }` to `amount: { minimum: 1 }`, your
 npm install -g @wannavf/mcp-sentinel
 ```
 
-Or zero-install:
+Or use zero-install:
 ```bash
 npx @wannavf/mcp-sentinel init
-```
-
----
-
-## Quick Start
-
-```bash
-sentinel init                    # Interactive setup wizard
-sentinel snapshot                # Lock current tool schemas
-sentinel check                   # Detect drift (CI exit code)
-sentinel diff                    # Detailed change report
-sentinel audit                   # Schema quality scoring
 ```
 
 ---
