@@ -14,12 +14,21 @@ MCP Sentinel snapshots your MCP server tool schemas, detects breaking changes, a
 
 ```bash
 npx @wannavf/mcp-sentinel init
+sentinel discover
 sentinel snapshot
 sentinel check
 sentinel diff
 ```
 
 Sentinel creates a `sentinel-lock.json` for your MCP server tool schemas. When a tool changes later, `sentinel check` fails CI and `sentinel diff` shows exactly what changed.
+
+Already have MCP servers configured in another app? Run:
+
+```bash
+sentinel discover --write
+```
+
+Sentinel will show the MCP servers it can find and let you choose which ones to add to `sentinel.config.json`.
 
 ```text
 filesystem: DRIFT detected
@@ -96,6 +105,18 @@ Connect to configured MCP servers and record all tool schemas.
 sentinel snapshot
 sentinel snapshot --server filesystem
 ```
+
+### `sentinel discover`
+
+Find MCP server configs on your machine and choose which ones to import.
+
+```bash
+sentinel discover                  # Show discovered MCP servers
+sentinel discover --write          # Pick servers and update sentinel.config.json
+sentinel discover --json           # Machine-readable discovery output
+```
+
+Discovery scans common MCP config locations plus MCP-shaped JSON files in the current project. If a server is not in a config file anywhere, add it manually in `sentinel.config.json`.
 
 ### `sentinel check`
 
@@ -269,7 +290,7 @@ jobs:
 
 `sentinel.config.json`:
 
-The default example watches the current folder (`.`). Replace it with another path if your MCP server should expose a different directory.
+The default example watches the current folder (`.`). Replace it with another path if your MCP filesystem server should expose a different directory.
 
 ```json
 {
@@ -286,6 +307,41 @@ The default example watches the current folder (`.`). Replace it with another pa
     "PARAM_REMOVED_OPTIONAL": "MAJOR"
   }
 }
+```
+
+### Adding Your MCP Servers
+
+Use discovery first:
+
+```bash
+sentinel discover
+sentinel discover --write
+```
+
+If Sentinel cannot find a server automatically, add it under `servers`:
+
+```json
+{
+  "compatibility": "BACKWARD",
+  "failOn": "MAJOR",
+  "servers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+    },
+    "my-server": {
+      "command": "node",
+      "args": ["C:\\path\\to\\my-mcp-server.js"]
+    }
+  }
+}
+```
+
+Each server entry is the command Sentinel should run to start that MCP server. After adding servers, run:
+
+```bash
+sentinel snapshot
+sentinel dashboard
 ```
 
 ### Compatibility Modes
