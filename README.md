@@ -269,6 +269,8 @@ jobs:
 
 `sentinel.config.json`:
 
+The default example watches the current folder (`.`). Replace it with another path if your MCP server should expose a different directory.
+
 ```json
 {
   "compatibility": "BACKWARD",
@@ -276,7 +278,7 @@ jobs:
   "servers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/data"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
     }
   },
   "rules": {
