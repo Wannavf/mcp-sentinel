@@ -8,6 +8,7 @@ import { watch } from "./watch.js";
 import { audit } from "./audit.js";
 import { init } from "./init.js";
 import { discover } from "./discover.js";
+import { doctor } from "./doctor.js";
 import { lockfileDiff } from "./lockfile-diff.js";
 import { dashboard } from "./tui.js";
 
@@ -16,7 +17,7 @@ const program = new Command();
 program
   .name("sentinel")
   .description("MCP Sentinel \u2014 Schema drift detection for MCP servers. The lockfile MCP should have shipped with.")
-  .version("0.2.4");
+  .version("1.0.0");
 
 program
   .command("init")
@@ -38,6 +39,21 @@ program
   .action(async (opts) => {
     try { await discover(opts.config, Boolean(opts.write), Boolean(opts.json)); }
     catch (err) { console.error("sentinel: " + (err instanceof Error ? err.message : String(err))); process.exit(1); }
+  });
+
+program
+  .command("doctor")
+  .description("Validate Sentinel config, server entries, and lockfile readiness")
+  .option("-c, --config <path>", "Path to sentinel.config.json", "sentinel.config.json")
+  .option("-l, --lockfile <path>", "Path to sentinel-lock.json", "sentinel-lock.json")
+  .action(async (opts) => {
+    try {
+      const ok = await doctor(opts.config, opts.lockfile);
+      process.exit(ok ? 0 : 1);
+    } catch (err) {
+      console.error("sentinel: " + (err instanceof Error ? err.message : String(err)));
+      process.exit(1);
+    }
   });
 
 program

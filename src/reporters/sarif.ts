@@ -6,7 +6,7 @@ export function reportSarif(results: DiffResult[]): string {
       id: c.ruleId,
       shortDescription: { text: c.summary },
       fullDescription: { text: c.detail },
-      helpUri: "https://github.com/mcp-sentinel/sentinel/blob/main/docs/rules.md#" + c.ruleId,
+      helpUri: "https://github.com/Wannavf/mcp-sentinel/blob/main/docs/rules.md#" + c.ruleId,
       properties: { severity: c.severity },
     }))
   );
@@ -38,7 +38,7 @@ export function reportSarif(results: DiffResult[]): string {
         tool: {
           driver: {
             name: "MCP Sentinel",
-            informationUri: "https://github.com/mcp-sentinel/sentinel",
+            informationUri: "https://github.com/Wannavf/mcp-sentinel",
             version: "0.1.0",
             rules: uniqueRules,
           },

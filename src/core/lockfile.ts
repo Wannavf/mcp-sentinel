@@ -17,7 +17,7 @@ export function readLockfile(path: string): SentinelLockfile {
 export function writeLockfile(path: string, lockfile: SentinelLockfile): void {
   lockfile.formatVersion = FORMAT_VERSION;
   lockfile.generatedAt = new Date().toISOString();
-  lockfile.generatedBy = "mcp-sentinel@0.1.0";
+  lockfile.generatedBy = "@wannavf/mcp-sentinel@1.0.0";
   lockfile.contentHash = hashContent(JSON.stringify(lockfile, sortedReplacer, 2));
   writeFileSync(resolve(path), JSON.stringify(lockfile, sortedReplacer, 2) + "\n", "utf-8");
 }

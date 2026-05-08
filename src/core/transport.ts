@@ -1,7 +1,10 @@
-﻿import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import type { LockedTool, ServerConfig } from "./types.js";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+import type { Transport } from "@modelcontextprotocol/sdk/shared/transport.js";
 import { hashTool } from "./hasher.js";
+import type { LockedTool, ServerConfig } from "./types.js";
 
 interface ServerSnapshot {
   transport: "stdio" | "http" | "sse";
@@ -27,20 +30,10 @@ export async function snapshotServer(
   config: ServerConfig
 ): Promise<{ name: string; snapshot: ServerSnapshot }> {
   const transportType = config.transport ?? "stdio";
-  if (transportType !== "stdio") {
-    throw new Error("Transport " + transportType + " not yet supported.");
-  }
-  if (!config.command) {
-    throw new Error("Server " + name + " is missing command.");
-  }
-
-  const mcpTransport = new StdioClientTransport({
-    command: config.command,
-    args: config.args ?? [],
-  });
+  const mcpTransport = createTransport(name, config);
 
   const client = new Client(
-    { name: "mcp-sentinel", version: "0.1.0" },
+    { name: "mcp-sentinel", version: "1.0.0" },
     {}
   );
 
@@ -67,7 +60,7 @@ export async function snapshotServer(
     return {
       name,
       snapshot: {
-        transport: "stdio",
+        transport: transportType,
         protocolVersion: serverInfo?.version ?? "unknown",
         serverInfo: {
           name: serverInfo?.name ?? name,
@@ -80,6 +73,36 @@ export async function snapshotServer(
     await mcpTransport.close().catch(() => {});
     throw err;
   }
+}
+
+function createTransport(name: string, config: ServerConfig): Transport {
+  const transportType = config.transport ?? "stdio";
+
+  if (transportType === "stdio") {
+    if (!config.command) {
+      throw new Error("Server " + name + " is missing command.");
+    }
+    return new StdioClientTransport({
+      command: config.command,
+      args: config.args ?? [],
+      env: config.env,
+    });
+  }
+
+  if (!config.url) {
+    throw new Error("Server " + name + " is missing url for " + transportType + " transport.");
+  }
+
+  const requestInit = config.headers ? { headers: config.headers } : undefined;
+  const url = new URL(config.url);
+
+  if (transportType === "http") {
+    return new StreamableHTTPClientTransport(url, { requestInit });
+  }
+
+  return new SSEClientTransport(url, {
+    requestInit,
+  });
 }
 
 export async function fetchLiveTools(

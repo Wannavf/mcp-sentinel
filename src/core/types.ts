@@ -42,6 +42,7 @@ export interface ServerConfig {
   args?: string[];
   url?: string;
   env?: Record<string, string>;
+  headers?: Record<string, string>;
 }
 
 export type CompatibilityMode = "STRICT" | "BACKWARD" | "FORWARD" | "FULL" | "NONE";

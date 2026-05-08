@@ -1,7 +1,7 @@
 {
   "name": "@wannavf/mcp-sentinel",
-  "version": "0.2.4",
-  "description": "Schema drift detection for MCP servers — the lockfile MCP should have shipped with.",
+  "version": "1.0.0",
+  "description": "Schema drift detection for MCP servers - the lockfile MCP should have shipped with.",
   "keywords": [
     "mcp",
     "model-context-protocol",
@@ -21,17 +21,19 @@
   },
   "files": [
     "dist",
+    "!dist/test",
     "action.yml"
   ],
   "scripts": {
-    "build": "tsc",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "npm run clean && tsc",
     "dev": "tsc --watch",
+    "test": "npm run build && node --test dist/test/*.test.js",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "blessed": "^0.1.81",
-    "blessed-contrib": "^4.11.0",
     "chalk": "^5.4.1",
     "commander": "^13.1.0",
     "fast-json-stable-stringify": "^2.1.0",
