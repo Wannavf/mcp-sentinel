@@ -7,6 +7,7 @@ import { update } from "./update.js";
 import { watch } from "./watch.js";
 import { audit } from "./audit.js";
 import { init } from "./init.js";
+import { discover } from "./discover.js";
 import { lockfileDiff } from "./lockfile-diff.js";
 import { dashboard } from "./tui.js";
 
@@ -15,7 +16,7 @@ const program = new Command();
 program
   .name("sentinel")
   .description("MCP Sentinel \u2014 Schema drift detection for MCP servers. The lockfile MCP should have shipped with.")
-  .version("0.2.3");
+  .version("0.2.4");
 
 program
   .command("init")
@@ -26,6 +27,17 @@ program
       console.error("sentinel: " + (err instanceof Error ? err.message : String(err)));
       process.exit(1);
     }
+  });
+
+program
+  .command("discover")
+  .description("Find MCP server configs on this machine and optionally import them")
+  .option("-c, --config <path>", "Path to sentinel.config.json", "sentinel.config.json")
+  .option("-w, --write", "Choose discovered servers and write them to config")
+  .option("--json", "Print discovered servers as JSON")
+  .action(async (opts) => {
+    try { await discover(opts.config, Boolean(opts.write), Boolean(opts.json)); }
+    catch (err) { console.error("sentinel: " + (err instanceof Error ? err.message : String(err))); process.exit(1); }
   });
 
 program
