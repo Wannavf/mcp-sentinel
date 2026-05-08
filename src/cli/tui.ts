@@ -298,7 +298,7 @@ export async function dashboard(
       "{bold}q{/bold} quit",
     ].join("  ");
     topBar.setContent(
-      ` {bold}MCP SENTINEL{/bold}  {grey-fg}schema-drift monitor · v0.2.0{/grey-fg}    ${hints}    {white-fg}${now}{/white-fg} `
+      ` {bold}MCP SENTINEL{/bold}  {grey-fg}schema-drift monitor · v0.2.2{/grey-fg}    ${hints}    {white-fg}${now}{/white-fg} `
     );
   };
 

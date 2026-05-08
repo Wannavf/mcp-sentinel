@@ -15,7 +15,7 @@ const program = new Command();
 program
   .name("sentinel")
   .description("MCP Sentinel \u2014 Schema drift detection for MCP servers. The lockfile MCP should have shipped with.")
-  .version("0.2.0");
+  .version("0.2.2");
 
 program
   .command("init")
