@@ -7,9 +7,8 @@
  *   a           snapshot all servers
  *   c           check selected server (drift)
  *   C           check all servers
- *   p           prove (z3) — requires Sentinel Pro
  *   d           diff selected server
- *   /           focus log filter (cycles info/warn/error/proof/all)
+ *   /           focus log filter (cycles info/warn/error/all)
  *   space       pause/resume log stream
  *   tab         cycle focus
  *   q / Ctrl-C  quit
@@ -222,7 +221,7 @@ export async function dashboard(
 
   const alertsList = blessed.list({
     top: 4, left: "75%", width: "25%", height: "55%-4",
-    label: " {bold}alerts{/bold} {grey-fg}[a=ack p=prove]{/grey-fg} ",
+    label: " {bold}alerts{/bold} {grey-fg}[a=ack]{/grey-fg} ",
     tags: true,
     keys: true, vi: true, mouse: true,
     border: { type: "line" },
@@ -294,7 +293,6 @@ export async function dashboard(
       "{bold}↑↓{/bold} select",
       "{bold}s{/bold} snapshot",
       "{bold}c{/bold} check",
-      "{bold}p{/bold} prove",
       "{bold}d{/bold} diff",
       "{bold}/{/bold} filter",
       "{bold}q{/bold} quit",
@@ -613,14 +611,11 @@ export async function dashboard(
     screen.render();
   });
   screen.key(["/"], () => {
-    const cycle: (SeverityLvl | "all")[] = ["all", "info", "warn", "error", "proof"];
+    const cycle: (SeverityLvl | "all")[] = ["all", "info", "warn", "error"];
     logFilter = cycle[(cycle.indexOf(logFilter) + 1) % cycle.length] ?? "all";
     reflowLogs();
     renderStatus();
     screen.render();
-  });
-  screen.key(["p"], () => {
-    log("proof", "z3", "—", "Z3 formal proofs require Sentinel Pro — https://sentinel.dev/pro");
   });
   screen.key(["d"], () => {
     if (!selectedServer) return;
@@ -659,7 +654,7 @@ export async function dashboard(
   log("info", "sentinel", "boot",
     `lockfile: ${lockfile.servers ? Object.keys(lockfile.servers).length : 0} servers locked`);
   log("info", "sentinel", "—",
-    `press 'C' to check all · 'A' to snapshot all · 'p' to prove`);
+    `press 'C' to check all · 'A' to snapshot all`);
 
   serverList.focus();
   screen.render();
