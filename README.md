@@ -293,14 +293,6 @@ sentinel/
 
 ---
 
-## Roadmap
-
-- Formal compatibility proofs with counterexamples
-- PR comment helper for GitHub Actions
-- HTTP and SSE transports
-
----
-
 ## License
 
 MIT
